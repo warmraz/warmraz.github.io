@@ -1,4 +1,6 @@
 let tg = window.Telegram.WebApp;
+let btcButton = document.getElementById("btcButton");
+btcButton.addEventListener("click", displayBTCPrice);
 
 tg.expand();
 
@@ -80,6 +82,17 @@ btn6.addEventListener("click", function(){
 	}
 });
 
+async function getBTCPrice() {
+    let response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd");
+    let data = await response.json();
+    return data.bitcoin.usd;
+}
+
+async function displayBTCPrice() {
+    let price = await getBTCPrice();
+    let priceDiv = document.getElementById("btcPrice");
+    priceDiv.textContent = "Текущая цена BTC/USDT: " + price + " USD";
+}
 
 Telegram.WebApp.onEvent("mainButtonClicked", function(){
 	tg.sendData(item);
